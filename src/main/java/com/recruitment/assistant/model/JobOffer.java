@@ -104,6 +104,9 @@ public class JobOffer {
         this.jobOfferStatus = jobOfferStatus;
     }
 
+    public JobOffer() {
+    }
+
     @Override
     public String toString() {
         return "JobOffer{" +

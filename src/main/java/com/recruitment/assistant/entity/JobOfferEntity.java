@@ -1,5 +1,7 @@
 package com.recruitment.assistant.entity;
 
+import com.recruitment.assistant.enums.JobApplnStatus;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class JobOfferEntity {
     }
 
     public JobOfferEntity(long jobId, String jobTitle, String jobDesc, String contactPerson,
-    		LocalDate createdDate, LocalDate modifiedDate, char jobOfferStatus) {
+    		LocalDate createdDate, LocalDate modifiedDate, JobApplnStatus jobOfferStatus) {
 
         this.jobId = jobId;
         this.jobTitle = jobTitle;
@@ -73,7 +75,7 @@ public class JobOfferEntity {
     /** This is the status of the job offer in the backend system.
      The probable values are 'A' - Active and 'I' - Inactive. */
     @Column(name = "status")
-    private char jobOfferStatus;
+    private JobApplnStatus jobOfferStatus;
 
     /**
      *  This is the list of job applications corresponding to this job offer.
@@ -138,11 +140,11 @@ public class JobOfferEntity {
         this.modifiedDate = modifiedDate;
     }
 
-    public char getJobOfferStatus() {
+    public JobApplnStatus getJobOfferStatus() {
         return jobOfferStatus;
     }
 
-    public void setJobOfferStatus(char jobOfferStatus) {
+    public void setJobOfferStatus(JobApplnStatus jobOfferStatus) {
         this.jobOfferStatus = jobOfferStatus;
     }
 }

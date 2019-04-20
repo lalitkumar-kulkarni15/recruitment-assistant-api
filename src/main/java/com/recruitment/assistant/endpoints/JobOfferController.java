@@ -1,13 +1,14 @@
 package com.recruitment.assistant.endpoints;
 
+import com.recruitment.assistant.exception.DataNotFoundException;
+import com.recruitment.assistant.model.JobCreationResp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
 import com.recruitment.assistant.model.JobOffer;
 import com.recruitment.assistant.service.IJobOfferSvc;
+import java.util.List;
 
 @RestController
 @RequestMapping("/job-offer/v1")
@@ -17,11 +18,35 @@ public class JobOfferController {
 	private IJobOfferSvc jobOfferSvc;
 
 	@PostMapping(path = "/newJobOffer/v1", consumes = "application/json")
-	public long createNewJobOffer(@RequestBody JobOffer jobOffer) throws RecAsstntTechnicalException {
+	public ResponseEntity<JobCreationResp> createNewJobOffer(@RequestBody JobOffer jobOffer)
+			throws RecAsstntTechnicalException {
 	
-		return this.jobOfferSvc.createNewJobOffer(jobOffer);
+		final long jobIdCreated = this.jobOfferSvc.createNewJobOffer(jobOffer);
+		final JobCreationResp jobCreationResp = new JobCreationResp(jobIdCreated,"Job offer has been successfully created.");
+		return ResponseEntity.ok().body(jobCreationResp);
   }
 
+  	@GetMapping(value = "/getAllJobOffers/v1",consumes = "application/json")
+  	public ResponseEntity<List<JobOffer>> getAllJobOffers(){
 
+		final List<JobOffer> jobOffers = this.jobOfferSvc.getAllJobOffers();
+		return ResponseEntity.ok().body(jobOffers);
+	}
+
+	@GetMapping("/getJobOfferByJobId/v1/{jobId}")
+	public ResponseEntity<JobOffer> getJobOfferByJobId(@PathVariable long jobId)
+			throws DataNotFoundException {
+
+		JobOffer jobOffer = this.jobOfferSvc.findJobOfferByJobId(jobId);
+		return ResponseEntity.ok().body(jobOffer);
+	}
+
+	@GetMapping("/getJobOfferByJobTitle/v1/{jobTitle}")
+	public ResponseEntity<JobOffer> getJobOfferByJobTitle(@PathVariable String jobTitle)
+			throws DataNotFoundException {
+
+		JobOffer jobOffer = this.jobOfferSvc.findJobOfferByJobTitle(jobTitle);
+		return ResponseEntity.ok().body(jobOffer);
+	}
 
 }
