@@ -1,34 +1,28 @@
-package com.recruitment.assistant.entity;
+package com.recruitment.assistant.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.recruitment.assistant.entity.JobOfferEntity;
 import com.recruitment.assistant.enums.JobApplicationStatus;
-import com.recruitment.assistant.model.JobOffer;
 
 import javax.persistence.*;
 
-@Entity(name = "JOB_APPLICATION")
-@Table(name = "JOB_APPLICATION")
-public class JobApplicationEntity {
+public class JobApplication {
+
+    private long jobId;
 
     /**
      *  This is the unique application id of the job application.
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "app_id")
     private long applicationId;
 
     /**
      *  This is the unique email id of the candidate who is applying
      *  for the job offer.
      */
-    @Column(name = "cand_email",nullable = false)
     private String candidateEmail;
 
     /**
      * This is the resume text of the candidate applying for the job offer.
      */
-    @Column(name = "resume_txt",nullable = false)
     private String resumeTxt;
 
     /**
@@ -39,34 +33,12 @@ public class JobApplicationEntity {
      * D) HIRED.
      *
      */
-    @Column(name="app_sts",nullable = false)
     private JobApplicationStatus applicationStatus;
-
-    public JobOfferEntity getJobOffer() {
-        return jobOffer;
-    }
-
-    public void setJobOffer(JobOfferEntity jobOffer) {
-        this.jobOffer = jobOffer;
-    }
 
     /**
      * This is the job offer for which the candidate has submitted the job application.
      */
-    /*@JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JOB_OFFER",updatable = false)
-    private JobOfferEntity relatedJobOffer;*/
-
-    /*@JsonBackReference
-    @ManyToOne()
-    @JoinColumn(name = "JOB_OFFER",updatable = false)
-    private JobOfferEntity relatedJobOffer;*/
-
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JOB_OFFER_ID")
-    private JobOfferEntity jobOffer;
+    private JobOffer relatedJobOffer;
 
     public long getApplicationId() {
         return applicationId;
@@ -98,8 +70,37 @@ public class JobApplicationEntity {
 
     public void setApplicationStatus(JobApplicationStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
+
     }
 
-    public JobApplicationEntity() {
+    public long getJobId() {
+        return jobId;
     }
+
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
+    }
+
+    public JobOffer getRelatedJobOffer() {
+        return relatedJobOffer;
+    }
+
+    public void setRelatedJobOffer(JobOffer relatedJobOffer) {
+        this.relatedJobOffer = relatedJobOffer;
+    }
+
+    public JobApplication(long applicationId, String candidateEmail, String resumeTxt,
+                                JobApplicationStatus applicationStatus,
+                                JobOffer relatedJobOffer) {
+
+        this.applicationId = applicationId;
+        this.candidateEmail = candidateEmail;
+        this.resumeTxt = resumeTxt;
+        this.applicationStatus = applicationStatus;
+        this.relatedJobOffer = relatedJobOffer;
+    }
+
+    public JobApplication() {
+    }
+
 }

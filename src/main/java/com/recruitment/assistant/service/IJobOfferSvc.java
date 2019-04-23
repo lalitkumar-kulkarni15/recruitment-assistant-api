@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IJobOfferSvc {
 
-    long createNewJobOffer(final JobOffer jobOffer) throws RecAsstntTechnicalException;
+    JobOffer createNewJobOffer(final JobOffer jobOffer) throws RecAsstntTechnicalException;
 
     List<JobOffer> getAllJobOffers();
 

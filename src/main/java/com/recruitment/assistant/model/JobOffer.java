@@ -1,8 +1,11 @@
 package com.recruitment.assistant.model;
 
-import com.recruitment.assistant.enums.JobApplnStatus;
+import com.recruitment.assistant.entity.JobApplicationEntity;
+import com.recruitment.assistant.enums.JobOfferStatus;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This model class contains the all the properties required for the job offer.
@@ -33,7 +36,17 @@ public class JobOffer {
 
     /** This is the status of the job offer in the backend system.
         The probable values are 'A' - Active and 'I' - Inactive. */
-    private JobApplnStatus jobOfferStatus;
+    private JobOfferStatus jobOfferStatus;
+
+    public List<JobApplicationEntity> getJobApplications() {
+        return jobApplications;
+    }
+
+    public void setJobApplications(List<JobApplicationEntity> jobApplications) {
+        this.jobApplications = jobApplications;
+    }
+
+    private List<JobApplicationEntity> jobApplications = new ArrayList<>();
 
     public void setJobId(long jobId) {
         this.jobId = jobId;
@@ -83,18 +96,18 @@ public class JobOffer {
         return modifiedDate;
     }
 
-    public JobApplnStatus getJobOfferStatus() {
+    public JobOfferStatus getJobOfferStatus() {
         return jobOfferStatus;
     }
 
-    public void setJobOfferStatus(JobApplnStatus jobOfferStatus) {
+    public void setJobOfferStatus(JobOfferStatus jobOfferStatus) {
         this.jobOfferStatus = jobOfferStatus;
     }
 
 
 
     public JobOffer(long jobId, String jobTitle, String jobDesc, String contactPerson,
-                    LocalDate createdDate, LocalDate modifiedDate, JobApplnStatus jobOfferStatus) {
+                    LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.jobDesc = jobDesc;
@@ -102,6 +115,13 @@ public class JobOffer {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.jobOfferStatus = jobOfferStatus;
+    }
+
+    public JobOffer(long jobId, String jobTitle, String contactPerson, LocalDate createdDate) {
+        this.jobId = jobId;
+        this.jobTitle = jobTitle;
+        this.contactPerson = contactPerson;
+        this.createdDate = createdDate;
     }
 
     public JobOffer() {

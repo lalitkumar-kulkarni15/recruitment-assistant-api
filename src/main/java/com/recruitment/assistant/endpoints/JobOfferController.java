@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
 import com.recruitment.assistant.model.JobOffer;
 import com.recruitment.assistant.service.IJobOfferSvc;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,12 +20,18 @@ public class JobOfferController {
 	private IJobOfferSvc jobOfferSvc;
 
 	@PostMapping(path = "/newJobOffer/v1", consumes = "application/json")
-	public ResponseEntity<JobCreationResp> createNewJobOffer(@RequestBody JobOffer jobOffer)
+	public ResponseEntity<JobOffer> createNewJobOffer(@RequestBody JobOffer jobOffer)
 			throws RecAsstntTechnicalException {
 	
-		final long jobIdCreated = this.jobOfferSvc.createNewJobOffer(jobOffer);
-		final JobCreationResp jobCreationResp = new JobCreationResp(jobIdCreated,"Job offer has been successfully created.");
-		return ResponseEntity.ok().body(jobCreationResp);
+		final JobOffer jobOfferSaved = this.jobOfferSvc.createNewJobOffer(jobOffer);
+
+		final URI uri =
+				MvcUriComponentsBuilder.fromController(getClass())
+						.path("/{id}")
+						.buildAndExpand(jobOfferSaved.getJobId())
+						.toUri();
+
+		return ResponseEntity.created(uri).body(jobOfferSaved);
   }
 
   	@GetMapping(value = "/getAllJobOffers/v1",consumes = "application/json")

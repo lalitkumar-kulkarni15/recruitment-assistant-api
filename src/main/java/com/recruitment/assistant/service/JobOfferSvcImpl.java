@@ -1,14 +1,18 @@
 package com.recruitment.assistant.service;
 
 import com.recruitment.assistant.data.IJobOfferRepository;
+import com.recruitment.assistant.entity.JobApplicationEntity;
 import com.recruitment.assistant.entity.JobOfferEntity;
 import com.recruitment.assistant.exception.DataNotFoundException;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
+import com.recruitment.assistant.model.JobApplication;
 import com.recruitment.assistant.model.JobOffer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,14 +35,16 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
      *                   occurred while persisting the job offer data in the datastore.
      */
     @Override
-    public long createNewJobOffer(final JobOffer jobOffer) throws RecAsstntTechnicalException {
+    public JobOffer createNewJobOffer(final JobOffer jobOffer) throws RecAsstntTechnicalException {
 
         JobOfferEntity jobOfferEntity = new JobOfferEntity();
         
         try {
         	BeanUtils.copyProperties(jobOffer,jobOfferEntity);
             final JobOfferEntity jobOfferEntityPersisted = this.jobOfferRepository.save(jobOfferEntity);
-            return jobOfferEntityPersisted.getJobId();
+            JobOffer jobOfferSaved = new JobOffer();
+            BeanUtils.copyProperties(jobOfferEntityPersisted,jobOfferSaved);
+            return jobOfferSaved;
         } catch(final Exception exception) {
         	throw new RecAsstntTechnicalException("Exception while persisting the job offer entity to " +
                     "the database",exception);
@@ -72,13 +78,13 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
     /**
      * This method fetches the job offer by accepting the job id field as an input.
      *
-     * @param  jobId : This is the unique id of the job offer.
-     * @return {@link JobOffer} : This is the job offer object which
-     *         contains all the required properties of the job offer.
+     * @param  jobId :                 This is the unique id of the job offer.
+     * @return {@link JobOffer} :      This is the job offer object which
+     *                                 contains all the required properties of the job offer.
      * @throws DataNotFoundException : This exception is thrown when the entities are not
-     *         found in the data store.
+     *                                 found in the data store.
      */
-    @Override
+    /*@Override
     public JobOffer findJobOfferByJobId(long jobId)
             throws DataNotFoundException {
 
@@ -88,13 +94,38 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
         JobOffer jobOffer = new JobOffer();
         BeanUtils.copyProperties(jobOfferEntity,jobOffer);
         return jobOffer;
+    }*/
+
+    @Override
+    public JobOffer findJobOfferByJobId(long jobId)
+            throws DataNotFoundException {
+
+        JobOfferEntity jobOfferEntity = this.jobOfferRepository.findById(jobId)
+                .orElseThrow(() -> new DataNotFoundException("Job Offer not found for" +
+                        " the given job Id :"+jobId));
+
+        JobOffer jobOffer = new JobOffer();
+        BeanUtils.copyProperties(jobOfferEntity,jobOffer);
+        return jobOffer;
     }
 
+
+    /**
+     * This method finds the job offer in the data store by the job title.
+     *
+     * @param jobTitle :               This is the title of the job offer, by which the
+     *                                 job offer is to be searched in the data store.
+     * @return @{@link JobOffer}       This object contains all the fields related
+     *                                 to the job offer.
+     * @throws DataNotFoundException : This exception is thrown when the job offer
+     *                                 entity is not found in the data store for the mentioned job
+     *                                 offer in the input.
+     */
     @Override
     public JobOffer findJobOfferByJobTitle(final String jobTitle)
             throws DataNotFoundException {
 
-        JobOfferEntity jobOfferEntity = this.jobOfferRepository.findByJobTitle(jobTitle)
+        final JobOfferEntity jobOfferEntity = this.jobOfferRepository.findByJobTitle(jobTitle)
                 .orElseThrow(() -> new DataNotFoundException("Job offer entity not " +
                         "found for the given job title :"+jobTitle));
 

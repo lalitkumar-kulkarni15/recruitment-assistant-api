@@ -1,18 +1,13 @@
 package com.recruitment.assistant.entity;
 
-import com.recruitment.assistant.enums.JobApplnStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.recruitment.assistant.enums.JobOfferStatus;
+import com.recruitment.assistant.model.JobApplication;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="JOB_OFFER")
@@ -21,8 +16,12 @@ public class JobOfferEntity {
     public JobOfferEntity() {
     }
 
+    public JobOfferEntity(long jobId) {
+        this.jobId = jobId;
+    }
+
     public JobOfferEntity(long jobId, String jobTitle, String jobDesc, String contactPerson,
-    		LocalDate createdDate, LocalDate modifiedDate, JobApplnStatus jobOfferStatus) {
+                          LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus) {
 
         this.jobId = jobId;
         this.jobTitle = jobTitle;
@@ -75,14 +74,22 @@ public class JobOfferEntity {
     /** This is the status of the job offer in the backend system.
      The probable values are 'A' - Active and 'I' - Inactive. */
     @Column(name = "status")
-    private JobApplnStatus jobOfferStatus;
+    private JobOfferStatus jobOfferStatus;
 
     /**
      *  This is the list of job applications corresponding to this job offer.
      */
-    @OneToMany
-    @JoinColumn(name = "Job_id",nullable = true)
-    private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+    /*@JsonManagedReference
+    @OneToMany(mappedBy = "relatedJobOffer",fetch = FetchType.LAZY)
+    private List<JobApplicationEntity> jobApplications = new ArrayList<>();*/
+
+   /* @JsonManagedReference
+    @OneToMany(mappedBy = "relatedJobOffer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<JobApplicationEntity> jobApplications = new ArrayList<>();*/
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "jobOffer", fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    private List<JobApplicationEntity> jobApplications;
 
     public List<JobApplicationEntity> getJobApplications() {
         return jobApplications;
@@ -140,11 +147,11 @@ public class JobOfferEntity {
         this.modifiedDate = modifiedDate;
     }
 
-    public JobApplnStatus getJobOfferStatus() {
+    public JobOfferStatus getJobOfferStatus() {
         return jobOfferStatus;
     }
 
-    public void setJobOfferStatus(JobApplnStatus jobOfferStatus) {
+    public void setJobOfferStatus(JobOfferStatus jobOfferStatus) {
         this.jobOfferStatus = jobOfferStatus;
     }
 }
