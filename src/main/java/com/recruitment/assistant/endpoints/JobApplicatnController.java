@@ -53,6 +53,12 @@ public class JobApplicatnController {
         return ResponseEntity.ok().body(jobApplicationRec);
     }
 
+    @GetMapping(path = "/getJobApplicationsByJobId/v1/{jobId}", consumes = "application/json")
+    public ResponseEntity<JobApplication> getJobApplicationByJobId(@PathVariable Long jobId) throws DataNotFoundException {
+        final JobApplication jobApplicationRec = this.jobApplicatnSvc.getAllApps(jobId);
+        return ResponseEntity.ok().body(jobApplicationRec);
+    }
+
     @PatchMapping(path = "/updateJobApplnStatus/v1/{appId}/{appStatus}",consumes = "application/json")
     public ResponseEntity<JobApplication> patchJobApplicationStatus
             (@PathVariable long appId, @PathVariable JobApplicationStatus appStatus)
@@ -60,5 +66,12 @@ public class JobApplicatnController {
 
         JobApplication jobApplication = this.jobApplicatnSvc.updateJobApplnStatus(appStatus,appId);
         return ResponseEntity.ok().body(jobApplication);
+    }
+
+    @GetMapping(path = "/getJobApplicatByJobId/v1/{jobId}", consumes = "application/json")
+    public ResponseEntity<JobApplication> getJobApplicatByJobId(@PathVariable Long jobId) throws
+            DataNotFoundException {
+        final JobApplication jobApplicationRec = this.jobApplicatnSvc.getApplicationsByJobId(jobId);
+        return ResponseEntity.ok().body(jobApplicationRec);
     }
 }

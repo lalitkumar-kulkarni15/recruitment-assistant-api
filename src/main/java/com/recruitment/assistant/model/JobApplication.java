@@ -100,6 +100,14 @@ public class JobApplication {
         this.relatedJobOffer = relatedJobOffer;
     }
 
+    public JobApplication(long applicationId, String candidateEmail, String resumeTxt, JobApplicationStatus applicationStatus) {
+        this.jobId = jobId;
+        this.applicationId = applicationId;
+        this.candidateEmail = candidateEmail;
+        this.resumeTxt = resumeTxt;
+        this.applicationStatus = applicationStatus;
+    }
+
     public JobApplication() {
     }
 

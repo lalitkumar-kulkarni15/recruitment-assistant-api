@@ -6,6 +6,7 @@ import com.recruitment.assistant.exception.NotificationException;
 import com.recruitment.assistant.model.JobApplication;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 public interface IJobApplicatnSvc {
 
@@ -15,4 +16,6 @@ public interface IJobApplicatnSvc {
 
     JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus, long appId)
             throws DataNotFoundException;
+
+    public List<JobApplication> getApplicationsByJobId(long jobId);
 }

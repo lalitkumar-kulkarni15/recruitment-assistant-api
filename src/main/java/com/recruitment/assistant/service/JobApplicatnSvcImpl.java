@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -101,6 +102,18 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
 
             return updatedJobApplication;
         }
+
+        public List<JobApplication> getApplicationsByJobId(long jobId){
+
+            List<JobApplicationEntity> jobApplicationList  = this.jobApplnRepo.findJobApplicationByOferId(jobId);
+            List<JobApplication> jobApplicationDtoList = jobApplicationList.stream().map(
+                    jbOfrEntity -> new JobApplication(jbOfrEntity.getApplicationId(),
+                            jbOfrEntity.getCandidateEmail(),jbOfrEntity.getResumeTxt(),
+                            jbOfrEntity.getApplicationStatus())
+                    ).collect(Collectors.toList());
+            return jobApplicationDtoList;
+        }
+
 
 
     }

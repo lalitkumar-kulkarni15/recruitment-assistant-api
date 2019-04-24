@@ -13,4 +13,5 @@ public interface IJobOfferRepository extends JpaRepository<JobOfferEntity,Long>{
 
     public Optional<JobOfferEntity> findByJobTitle(String jobTitle);
 
+
 }

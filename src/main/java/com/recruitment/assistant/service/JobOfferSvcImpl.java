@@ -1,18 +1,15 @@
 package com.recruitment.assistant.service;
 
 import com.recruitment.assistant.data.IJobOfferRepository;
-import com.recruitment.assistant.entity.JobApplicationEntity;
 import com.recruitment.assistant.entity.JobOfferEntity;
 import com.recruitment.assistant.exception.DataNotFoundException;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
-import com.recruitment.assistant.model.JobApplication;
 import com.recruitment.assistant.model.JobOffer;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -96,13 +93,14 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
         return jobOffer;
     }*/
 
+    @Transactional(readOnly = true)
     @Override
     public JobOffer findJobOfferByJobId(long jobId)
             throws DataNotFoundException {
 
-        JobOfferEntity jobOfferEntity = this.jobOfferRepository.findById(jobId)
-                .orElseThrow(() -> new DataNotFoundException("Job Offer not found for" +
-                        " the given job Id :"+jobId));
+        Optional<JobOfferEntity> jobOfferEntity = this.jobOfferRepository.findById(jobId);
+               /* .orElseThrow(() -> new DataNotFoundException("Job Offer not found for" +
+                        " the given job Id :"+jobId));*/
 
         JobOffer jobOffer = new JobOffer();
         BeanUtils.copyProperties(jobOfferEntity,jobOffer);

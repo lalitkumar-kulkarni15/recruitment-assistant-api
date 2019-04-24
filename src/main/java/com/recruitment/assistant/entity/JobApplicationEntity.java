@@ -63,9 +63,14 @@ public class JobApplicationEntity {
     @JoinColumn(name = "JOB_OFFER",updatable = false)
     private JobOfferEntity relatedJobOffer;*/
 
+    /*@JsonBackReference
+    @ManyToOne()
+    @JoinColumn(name = "JOB_OFFER_ID")
+    private JobOfferEntity jobOffer;*/
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JOB_OFFER_ID")
+    @JoinColumn(name = "Job_id",updatable = false)
     private JobOfferEntity jobOffer;
 
     public long getApplicationId() {

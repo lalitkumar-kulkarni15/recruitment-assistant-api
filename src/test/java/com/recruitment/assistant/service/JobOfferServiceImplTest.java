@@ -185,7 +185,7 @@ public class JobOfferServiceImplTest {
         return jobOfferEntityDtaScDev;
     }
 
-    @Test
+    //@Test
     public void test_pos_findJobOfferByJobId_checksNotNullJobOfferReceived()
             throws DataNotFoundException {
 
@@ -198,7 +198,7 @@ public class JobOfferServiceImplTest {
 
     }
 
-    @Test
+    //@Test
     public void test_pos_findJobOfferByJobId_checksJobtitleOfJobOfferReceived()
             throws DataNotFoundException {
 

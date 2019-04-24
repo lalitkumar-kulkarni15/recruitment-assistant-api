@@ -6,7 +6,9 @@ import com.recruitment.assistant.model.JobApplication;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -87,15 +89,19 @@ public class JobOfferEntity {
     @OneToMany(mappedBy = "relatedJobOffer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<JobApplicationEntity> jobApplications = new ArrayList<>();*/
 
-    @JsonManagedReference
+    /*@JsonManagedReference
     @OneToMany(mappedBy = "jobOffer", fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    private List<JobApplicationEntity> jobApplications;
+    private List<JobApplicationEntity> jobApplications;*/
 
-    public List<JobApplicationEntity> getJobApplications() {
+    @JsonManagedReference
+    @OneToMany(mappedBy = "jobOffer",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private Set<JobApplicationEntity> jobApplications = new HashSet<>();
+
+    public Set<JobApplicationEntity> getJobApplications() {
         return jobApplications;
     }
 
-    public void setJobApplications(List<JobApplicationEntity> jobApplications) {
+    public void setJobApplications(Set<JobApplicationEntity> jobApplications) {
         this.jobApplications = jobApplications;
     }
 
