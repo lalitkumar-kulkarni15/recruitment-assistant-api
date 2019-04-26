@@ -1,4 +1,4 @@
-package com.recruitment.assistant.data;
+package com.recruitment.assistant.repository;
 
 import com.recruitment.assistant.entity.JobApplicationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

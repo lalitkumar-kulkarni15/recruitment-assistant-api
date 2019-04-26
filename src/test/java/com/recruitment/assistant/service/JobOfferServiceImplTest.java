@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.BeanUtils;
 import org.springframework.orm.jpa.JpaSystemException;
-import com.recruitment.assistant.data.IJobOfferRepository;
+import com.recruitment.assistant.repository.IJobOfferRepository;
 import com.recruitment.assistant.entity.JobOfferEntity;
 import com.recruitment.assistant.enums.JobOfferStatus;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
@@ -36,14 +36,30 @@ public class JobOfferServiceImplTest {
     public void test_pos_createNewJobOffer_persistEntitySuccessfully_returnsJobId_Successfully()
             throws RecAsstntTechnicalException{
 
-       final JobOffer jobOfferTestData = createJobOfferTestData();
+        JobOffer jobOfferTestData = new JobOffer();
+        jobOfferTestData.setJobId(1L);
+        jobOfferTestData.setJobTitle("title");
+        jobOfferTestData.setContactPerson("Contact person");
+        jobOfferTestData.setCreatedDate(LocalDate.now());
+        jobOfferTestData.setModifiedDate(LocalDate.now());
+        jobOfferTestData.setJobDesc("Job Desc");
+        jobOfferTestData.setJobOfferStatus(JobOfferStatus.ACTIVE);
+
        JobOfferEntity jobOfferEntity = new JobOfferEntity();
        BeanUtils.copyProperties(jobOfferTestData,jobOfferEntity);
        when(this.jobOfferRepository.save(Mockito.any())).thenReturn(jobOfferEntity);
        JobOffer persistedJobOffer = this.jobOfferSvc.createNewJobOffer(jobOfferTestData);
        assertEquals(1L, persistedJobOffer.getJobId());
     }
-    
+
+    private JobOffer createJobOfferTestDataPositive() {
+
+        JobOffer jobOfr = new JobOffer(2L,"Title","JobDesc","Lalit",
+                LocalDate.now(),LocalDate.now(),JobOfferStatus.ACTIVE);
+
+        return jobOfr;
+    }
+
     @Test(expected=RecAsstntTechnicalException.class)
     public void test_neg_createNewJobOffer_throwsRecAsstntException_WhenNullPointer()
             throws RecAsstntTechnicalException {
@@ -70,10 +86,11 @@ public class JobOfferServiceImplTest {
 
     private JobOffer createJobOfferTestData() {
 
-       return new JobOffer(1L,"Senior Java Developer",
+        JobOffer jobOffer = new JobOffer(1L,"Sr. Java Developer",
                 "SR. Java Dev with 6+ yrs exp in Spring boot with microservices.",
                 "Maria Bezrovkov", LocalDate.now(),LocalDate.now(), JobOfferStatus.ACTIVE);
 
+        return jobOffer;
     }
 
     @Test

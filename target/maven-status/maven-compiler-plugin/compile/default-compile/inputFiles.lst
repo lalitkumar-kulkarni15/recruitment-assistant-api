@@ -1,4 +1,7 @@
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\appconfig\ApplicationConfig.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\endpoints\NotificationController.java
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\exception\GlobalExceptionHandler.java
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\repository\IJobOfferRepository.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\NotifProcessSvcImpl.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\IJobApplicatnSvc.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\JobOfferSvcImpl.java
@@ -6,15 +9,15 @@ E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\model\Notific
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\model\JobCreationResp.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\endpoints\JobApplicatnController.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\exception\NotificationException.java
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\repository\IJobApplicationRepository.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\IJobOfferSvc.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\NotifClientSvcImpl.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\RecruitmentAssistantApiApplication.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\model\JobOffer.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\enums\JobApplicationStatus.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\exception\DataNotFoundException.java
-E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\exception\InputValidationException.java
-E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\data\IJobApplicationRepository.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\exception\RecAsstntTechnicalException.java
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\model\ErrorDetails.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\model\NotificationRequest.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\endpoints\JobOfferController.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\entity\JobApplicationEntity.java
@@ -23,5 +26,5 @@ E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\JobAp
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\entity\JobOfferEntity.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\INotifClientSvc.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\enums\JobOfferStatus.java
+E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\documentation\SwaggerConfig.java
 E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\service\INotifProcessSvc.java
-E:\IntellijProjectCodebase\src\main\java\com\recruitment\assistant\data\IJobOfferRepository.java

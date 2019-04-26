@@ -4,25 +4,32 @@ import com.recruitment.assistant.entity.JobOfferEntity;
 import com.recruitment.assistant.enums.JobApplicationStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 public class JobApplication {
 
+    @NotNull(message = "Job id field cannot be null in the input request.")
     private long jobId;
 
     /**
      *  This is the unique application id of the job application.
      */
+    @NotNull(message = "App id field cannot be null in the input request.")
     private long applicationId;
 
     /**
      *  This is the unique email id of the candidate who is applying
      *  for the job offer.
      */
+    @NotNull(message = "Email id field cannot be null in the input request.")
+    @Email(message= "Please send the email id in appropriate email format.")
     private String candidateEmail;
 
     /**
      * This is the resume text of the candidate applying for the job offer.
      */
+    @NotNull(message = "Resume text field cannot be null in the input request.")
     private String resumeTxt;
 
     /**
@@ -33,6 +40,7 @@ public class JobApplication {
      * D) HIRED.
      *
      */
+    @NotNull(message = "Job application status field cannot be null in the input request.")
     private JobApplicationStatus applicationStatus;
 
     /**
@@ -106,6 +114,14 @@ public class JobApplication {
         this.candidateEmail = candidateEmail;
         this.resumeTxt = resumeTxt;
         this.applicationStatus = applicationStatus;
+    }
+
+    public JobApplication(long jobId,String candidateEmail,JobApplicationStatus status,String resumeTxt){
+        this.jobId = jobId;
+        this.candidateEmail=candidateEmail;
+        this.resumeTxt=resumeTxt;
+        this.applicationStatus=status;
+
     }
 
     public JobApplication() {

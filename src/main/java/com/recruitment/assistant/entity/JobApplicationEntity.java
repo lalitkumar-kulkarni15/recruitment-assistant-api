@@ -1,9 +1,7 @@
 package com.recruitment.assistant.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.recruitment.assistant.enums.JobApplicationStatus;
-import com.recruitment.assistant.model.JobOffer;
-
 import javax.persistence.*;
 
 @Entity(name = "JOB_APPLICATION")
@@ -53,24 +51,9 @@ public class JobApplicationEntity {
     /**
      * This is the job offer for which the candidate has submitted the job application.
      */
-    /*@JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JOB_OFFER",updatable = false)
-    private JobOfferEntity relatedJobOffer;*/
-
-    /*@JsonBackReference
-    @ManyToOne()
-    @JoinColumn(name = "JOB_OFFER",updatable = false)
-    private JobOfferEntity relatedJobOffer;*/
-
-    /*@JsonBackReference
-    @ManyToOne()
-    @JoinColumn(name = "JOB_OFFER_ID")
-    private JobOfferEntity jobOffer;*/
-
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Job_id",updatable = false)
+    @JoinColumn(name = "Job_id",nullable = false)
+    @JsonIgnore
     private JobOfferEntity jobOffer;
 
     public long getApplicationId() {

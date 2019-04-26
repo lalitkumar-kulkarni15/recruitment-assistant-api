@@ -9,8 +9,6 @@ com\recruitment\assistant\service\IJobOfferSvc.class
 com\recruitment\assistant\service\JobApplicatnSvcImpl.class
 com\recruitment\assistant\service\INotifClientSvc.class
 com\recruitment\assistant\service\NotifProcessSvcImpl.class
-com\recruitment\assistant\data\IJobApplicationRepository.class
-com\recruitment\assistant\exception\InputValidationException.class
 com\recruitment\assistant\entity\JobOfferEntity.class
 com\recruitment\assistant\service\INotifProcessSvc.class
 com\recruitment\assistant\endpoints\JobApplicatnController.class
@@ -18,7 +16,6 @@ com\recruitment\assistant\service\NotifClientSvcImpl.class
 com\recruitment\assistant\enums\JobOfferStatus.class
 com\recruitment\assistant\exception\NotificationException.class
 com\recruitment\assistant\model\Notification.class
-com\recruitment\assistant\data\IJobOfferRepository.class
 com\recruitment\assistant\service\JobOfferSvcImpl.class
 com\recruitment\assistant\endpoints\JobOfferController.class
 com\recruitment\assistant\endpoints\NotificationController.class

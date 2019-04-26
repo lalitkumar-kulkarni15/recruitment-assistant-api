@@ -21,4 +21,7 @@ public class RecAsstntTechnicalException extends Exception {
 		super(message,cause);
 	}
 
+	public RecAsstntTechnicalException(String message) {
+		super(message);
+	}
 }

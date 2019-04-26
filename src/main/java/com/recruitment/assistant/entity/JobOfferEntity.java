@@ -1,15 +1,12 @@
 package com.recruitment.assistant.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.recruitment.assistant.enums.JobOfferStatus;
-import com.recruitment.assistant.model.JobApplication;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.hibernate.annotations.Formula;
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="JOB_OFFER")
@@ -78,22 +75,23 @@ public class JobOfferEntity {
     @Column(name = "status")
     private JobOfferStatus jobOfferStatus;
 
+    @Transient
+    public int getNoOfApplication() {
+        return noOfApplication;
+    }
+
+    @Transient
+    public void setNoOfApplication(int noOfApplication) {
+        this.noOfApplication = noOfApplication;
+    }
+
+    @Formula("(SELECT COUNT(*) FROM JOB_APPLICATION A WHERE A.Job_id=Job_Id)")
+    private int noOfApplication;
+
     /**
      *  This is the list of job applications corresponding to this job offer.
      */
-    /*@JsonManagedReference
-    @OneToMany(mappedBy = "relatedJobOffer",fetch = FetchType.LAZY)
-    private List<JobApplicationEntity> jobApplications = new ArrayList<>();*/
-
-   /* @JsonManagedReference
-    @OneToMany(mappedBy = "relatedJobOffer",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private List<JobApplicationEntity> jobApplications = new ArrayList<>();*/
-
-    /*@JsonManagedReference
-    @OneToMany(mappedBy = "jobOffer", fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    private List<JobApplicationEntity> jobApplications;*/
-
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "jobOffer",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<JobApplicationEntity> jobApplications = new HashSet<>();
 

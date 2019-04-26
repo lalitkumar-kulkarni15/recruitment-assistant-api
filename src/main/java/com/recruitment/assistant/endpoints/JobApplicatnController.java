@@ -5,22 +5,28 @@ import com.recruitment.assistant.exception.DataNotFoundException;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
 import com.recruitment.assistant.model.JobApplication;
 import com.recruitment.assistant.service.IJobApplicatnSvc;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-
+import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/job-application/v1")
+@Api(tags = "Job application API", value = "This API houses all the lifecycle of the job  " +
+        "application.")
 public class JobApplicatnController {
 
     @Autowired
     private IJobApplicatnSvc jobApplicatnSvc;
 
     @PostMapping(path = "/newJobApplication/v1", consumes = "application/json")
-    public ResponseEntity submitJobApplication(@RequestBody JobApplication jobApplication)
+    public ResponseEntity submitJobApplication(@Valid @RequestBody JobApplication jobApplication)
             throws RecAsstntTechnicalException, DataNotFoundException {
 
         final long jobAppId = this.jobApplicatnSvc.submitJobApplicatn(jobApplication);
@@ -32,20 +38,6 @@ public class JobApplicatnController {
 
         return ResponseEntity.created(uri).build();
     }
-
-    /*@PostMapping(path = "/newJobApplication/v2", consumes = "application/json")
-    public ResponseEntity<JobApplication> submitJobApplicationNew(@RequestBody JobApplication jobApplication)
-            throws RecAsstntTechnicalException, DataNotFoundException {
-
-        final JobApplication jobAppl = this.jobApplicatnSvc.saveJobAppl(jobApplication);
-
-       *//* final URI uri = MvcUriComponentsBuilder.fromController(getClass())
-                .path("/{id}")
-                .buildAndExpand(jobOfferRec.getJobApplications().sort(s->s.getApplicationId());)
-                        .toUri();*//*
-
-        return ResponseEntity.created(null).body(null);
-    }*/
 
     @GetMapping(path = "/getJobApplication/v1/{appId}", consumes = "application/json")
     public ResponseEntity<JobApplication> getJobApplication(@PathVariable Long appId) throws DataNotFoundException {
@@ -69,9 +61,9 @@ public class JobApplicatnController {
     }
 
     @GetMapping(path = "/getJobApplicatByJobId/v1/{jobId}", consumes = "application/json")
-    public ResponseEntity<JobApplication> getJobApplicatByJobId(@PathVariable Long jobId) throws
+    public ResponseEntity<List<JobApplication>> getJobApplicatByJobId(@PathVariable Long jobId) throws
             DataNotFoundException {
-        final JobApplication jobApplicationRec = this.jobApplicatnSvc.getApplicationsByJobId(jobId);
+        final List<JobApplication> jobApplicationRec = this.jobApplicatnSvc.getApplicationsByJobId(jobId);
         return ResponseEntity.ok().body(jobApplicationRec);
     }
 }

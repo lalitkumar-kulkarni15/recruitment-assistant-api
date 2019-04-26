@@ -11,12 +11,4 @@ public class RecruitmentAssistantApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RecruitmentAssistantApiApplication.class, args);
 	}
-
-	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
-
-
-
 }

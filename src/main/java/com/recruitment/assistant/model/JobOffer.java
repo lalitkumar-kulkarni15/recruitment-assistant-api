@@ -3,9 +3,13 @@ package com.recruitment.assistant.model;
 import com.recruitment.assistant.entity.JobApplicationEntity;
 import com.recruitment.assistant.enums.JobOfferStatus;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This model class contains the all the properties required for the job offer.
@@ -20,33 +24,54 @@ public class JobOffer {
     private long jobId;
 
     // This the title of the job offer which is unique.
+    @NotNull(message = "Job title field cannot be null in the input request.")
+    @Size(max = 50,message = "Job title should not be more than 50 characters in length.")
     private String jobTitle;
 
     // This field contains the description of the job offer.
+    @NotNull(message = "Job description field cannot be null in the input request.")
+    @Size(max = 500,message = "Job description field should not be more than 500 characters in length.")
     private String jobDesc;
 
     // This field holds the name of the concerned person for the mentioned job offer.
+    @NotNull(message = "Contact person field cannot be null in the input request.")
+    @Size(max = 50,message = "Contact person field should not be more than 50 characters in length.")
     private String contactPerson;
 
     // This is the creation date of the job offer in the system.
+    @NotNull(message = "Created date field cannot be null in the input request.")
     private LocalDate createdDate;
 
     // This is the date when the job offer is modified in the system.
+    @NotNull(message = "Modified date field cannot be null in the input request.")
     private LocalDate modifiedDate;
 
     /** This is the status of the job offer in the backend system.
         The probable values are 'A' - Active and 'I' - Inactive. */
     private JobOfferStatus jobOfferStatus;
 
-    public List<JobApplicationEntity> getJobApplications() {
+    public JobOffer(long jobId, String jobtitle, String jobDesc, String contactPerson, LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus) {
+    }
+
+    public int getNoOfApplications() {
+        return noOfApplications;
+    }
+
+    public void setNoOfApplications(int noOfApplications) {
+        this.noOfApplications = noOfApplications;
+    }
+
+    private int noOfApplications;
+
+    public Set<JobApplication> getJobApplications() {
         return jobApplications;
     }
 
-    public void setJobApplications(List<JobApplicationEntity> jobApplications) {
+    public void setJobApplications(Set<JobApplication> jobApplications) {
         this.jobApplications = jobApplications;
     }
 
-    private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+    private Set<JobApplication> jobApplications = new HashSet<>();
 
     public void setJobId(long jobId) {
         this.jobId = jobId;
@@ -107,7 +132,7 @@ public class JobOffer {
 
 
     public JobOffer(long jobId, String jobTitle, String jobDesc, String contactPerson,
-                    LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus) {
+                    LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus,int noOfApplications) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.jobDesc = jobDesc;
@@ -115,6 +140,7 @@ public class JobOffer {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.jobOfferStatus = jobOfferStatus;
+        this.noOfApplications= noOfApplications;
     }
 
     public JobOffer(long jobId, String jobTitle, String contactPerson, LocalDate createdDate) {
