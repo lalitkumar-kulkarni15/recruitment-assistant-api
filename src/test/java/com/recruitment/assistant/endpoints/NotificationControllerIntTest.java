@@ -13,10 +13,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.recruitment.assistant.utils.ITestUtils.createURLWithPort;
 
 @RunWith(SpringRunner.class)
