@@ -25,6 +25,15 @@ public class JobApplicatnController {
     @Autowired
     private IJobApplicatnSvc jobApplicatnSvc;
 
+    /**
+     * This method accepts the job application details and persists in the
+     * data store.
+     *
+     * @param jobApplication : {@link JobApplication}
+     * @return               : {@link ResponseEntity}
+     * @throws RecAsstntTechnicalException
+     * @throws DataNotFoundException
+     */
     @PostMapping(path = "/newJobApplication/v1", consumes = "application/json")
     public ResponseEntity submitJobApplication(@Valid @RequestBody JobApplication jobApplication)
             throws RecAsstntTechnicalException, DataNotFoundException {
@@ -39,18 +48,46 @@ public class JobApplicatnController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping(path = "/getJobApplication/v1/{appId}", consumes = "application/json")
-    public ResponseEntity<JobApplication> getJobApplication(@PathVariable Long appId) throws DataNotFoundException {
+    /**
+     *  This api finds the job application from the data store on the basis
+     *  of the app id.
+     *
+     * @param  appId : The application id of the required application.
+     * @return {@link ResponseEntity<JobApplication>}
+     * @throws DataNotFoundException : This exception is thrown when no job
+     *                                 application is found for the given app id.
+     */
+    @GetMapping(path = "/getJobApplicationByAppId/v1/{appId}", consumes = "application/json")
+    public ResponseEntity<JobApplication> getJobApplicationByAppId(@PathVariable Long appId) throws DataNotFoundException {
         final JobApplication jobApplicationRec = this.jobApplicatnSvc.getAllApps(appId);
         return ResponseEntity.ok().body(jobApplicationRec);
     }
 
+    /**
+     * This api finds the job application from the data store on the basis
+     * of the job id.
+     *
+     * @param jobId : The job id for which the application was submitted.
+     * @return {@link ResponseEntity<JobApplication>}
+     * @throws DataNotFoundException : This exception is thrown when no job
+     *      *                          application is found for the given job id.
+     */
     @GetMapping(path = "/getJobApplicationsByJobId/v1/{jobId}", consumes = "application/json")
     public ResponseEntity<JobApplication> getJobApplicationByJobId(@PathVariable Long jobId) throws DataNotFoundException {
         final JobApplication jobApplicationRec = this.jobApplicatnSvc.getAllApps(jobId);
         return ResponseEntity.ok().body(jobApplicationRec);
     }
 
+    /**
+     * This api updates the status of the job application and then triggers
+     * a notification to inform the same.
+     * @param appId     : It accepts the application id of the application whoose
+     *                    status needs to be updated.
+     * @param appStatus : It accepts the application status that needs to be updated.
+     * @return          : {@link ResponseEntity<JobApplication>}
+     * @throws DataNotFoundException : This exception is thrown when no job application is found
+     *                   for the given app id.
+     */
     @PatchMapping(path = "/updateJobApplnStatus/v1/{appId}/{appStatus}",consumes = "application/json")
     public ResponseEntity<JobApplication> patchJobApplicationStatus
             (@PathVariable long appId, @PathVariable JobApplicationStatus appStatus)

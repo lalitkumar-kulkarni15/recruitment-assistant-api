@@ -173,7 +173,7 @@ public class JobApplicationControllerIntTest {
 
         HttpEntity<String> entityFetch = new HttpEntity<String>(null,httpHeaders);
         ResponseEntity<String> responseApp = restTemplate.exchange
-                (createURLWithPort ("/job-application/v1/getJobApplication/v1/1",host,port),
+                (createURLWithPort ("/job-application/v1/getJobApplicationByAppId/v1/1",host,port),
                         HttpMethod.GET,entityFetch,String.class);
         Assert.assertEquals(HttpStatus.OK, responseApp.getStatusCode());
 
