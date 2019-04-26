@@ -26,8 +26,6 @@ public class NotifClientSvcImpl implements INotifClientSvc {
 
         try {
 
-            //Uri uri = new Uri(notificationReq.getNotfSvcUrl());
-
             NotificationRequest notifReq = createNotfReq(updatedJobApplication);
 
             HttpHeaders headers = new HttpHeaders();

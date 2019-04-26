@@ -124,7 +124,5 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
             ).collect(Collectors.toList());
 
             return jobOfferDtoList;
-
         }
-
     }
