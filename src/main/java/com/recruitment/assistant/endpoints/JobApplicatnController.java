@@ -49,12 +49,12 @@ public class JobApplicatnController {
      * @throws RecAsstntTechnicalException
      * @throws DataNotFoundException
      */
-    @ApiOperation(value = "Create a new Job Application.", notes = "This API creates a new Job Application and stores" +
-            " in the data store.")
+    @ApiOperation(value = "Create a new Job Application.", notes = "This API creates a new Job" +
+                         " Application and stores in the data store.")
     @ApiResponses(value = {@ApiResponse(code = 500, message = "Something went wrong in the service, please "
-            + "contact the system administrator - Email - lalitkulkarniofficial@gmail.com"),
+                          + "contact the system administrator - Email - lalitkulkarniofficial@gmail.com"),
             @ApiResponse(code = 201, message = "Job Application has been successfully created in the system.")})
-    @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
+            @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
     @PostMapping(path = "/newJobApplication/v1", consumes = "application/json")
     public ResponseEntity submitJobApplication(@Valid @RequestBody JobApplication jobApplication)
             throws RecAsstntTechnicalException, DataNotFoundException {
@@ -85,12 +85,11 @@ public class JobApplicatnController {
      * @throws DataNotFoundException : This exception is thrown when no job
      *                               application is found for the given app id.
      */
-    @ApiOperation(value = "Get a Job Application by app id",
-            notes = "This API fetches Job Application by appId")
+    @ApiOperation(value = "Get a Job Application by app id", notes = "This API fetches Job Application by appId")
     @ApiResponses(value = {@ApiResponse(code = 500, message = "Something went wrong in the service, please "
             + "contact the system administrator - Email - lalitkulkarniofficial@gmail.com"),
             @ApiResponse(code = 201, message = "Job Application has been successfully fetched the system.")})
-    @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
+            @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
     @GetMapping(path = "/getJobApplicationByAppId/v1/{appId}", consumes = "application/json")
     public ResponseEntity<JobApplication> getJobApplicationByAppId(@PathVariable Long appId) throws DataNotFoundException {
 
@@ -110,14 +109,14 @@ public class JobApplicatnController {
      * @throws DataNotFoundException : This exception is thrown when no job
      *                              application is found for the given job id.
      */
-    @ApiOperation(value = "Get a Job Application by job id",
-            notes = "This API fetches Job Application by job id")
+    @ApiOperation(value = "Get a Job Application by job id", notes = "This API fetches Job Application by job id")
     @ApiResponses(value = {@ApiResponse(code = 500, message = "Something went wrong in the service, please "
-            + "contact the system administrator - Email - lalitkulkarniofficial@gmail.com"),
+                  + "contact the system administrator - Email - lalitkulkarniofficial@gmail.com"),
             @ApiResponse(code = 201, message = "Job Application has been successfully fetched the system.")})
-    @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
+            @ApiResponse(code = 400, message = "Bad input request.Please check the error description for more details.")
     @GetMapping(path = "/getJobApplicationsByJobId/v1/{jobId}", consumes = "application/json")
-    public ResponseEntity<List<JobApplication>> getJobApplicationByJobId(@PathVariable Long jobId) throws DataNotFoundException, RecAsstntTechnicalException {
+    public ResponseEntity<List<JobApplication>> getJobApplicationByJobId(@PathVariable Long jobId) throws DataNotFoundException,
+            RecAsstntTechnicalException {
         final List<JobApplication> jobApplicationRec = this.jobApplicatnSvc.getApplicationsByJobId(jobId);
         return ResponseEntity.ok().body(jobApplicationRec);
     }

@@ -48,7 +48,8 @@ public class JobOfferControllerUnitTest {
                 LocalDate.now(),LocalDate.now(), JobOfferStatus.ACTIVE);
 
         when(jobOffersvc.createNewJobOffer(Mockito.any())).thenReturn(jobOffer);
-        JobApplication jobApplication = new JobApplication(1L,"lalit@gmail.com","SampleResume", JobApplicationStatus.APPLIED);
+        JobApplication jobApplication = new JobApplication(1L,"lalit@gmail.com",
+                "SampleResume", JobApplicationStatus.APPLIED);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/job-offer/v1/newJobOffer/v1")
