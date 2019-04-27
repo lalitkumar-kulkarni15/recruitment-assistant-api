@@ -1,8 +1,6 @@
 # recruitment-assistant-api
 
-# Instructions
-
-# Importing the source code into the IDE workspace :-
+# Instructions for users
 
 1) If you are using any IDE like Eclipse , STS or Intellij idea,
    Kindly import this source code as a maven project. As maven is
