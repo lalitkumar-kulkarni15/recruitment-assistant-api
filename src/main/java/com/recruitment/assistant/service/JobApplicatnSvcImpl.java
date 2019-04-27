@@ -31,7 +31,8 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
     private INotifClientSvc notificationSvc;
 
     @Override
-    public long submitJobApplicatn(final JobApplication jobApplication) throws DataNotFoundException,RecAsstntTechnicalException {
+    public long submitJobApplicatn(final JobApplication jobApplication)
+            throws DataNotFoundException,RecAsstntTechnicalException {
 
         Optional<JobApplication> jobApplicationOp =  Optional.ofNullable(jobApplication);
         if(jobApplicationOp.isPresent()) {
@@ -72,39 +73,86 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
             return jobAppli;
         }
 
-        @Override
+        /*@Override
         public JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus,long appId)
-            throws DataNotFoundException {
+                throws DataNotFoundException, RecAsstntTechnicalException {
+
+            try {
+
+                JobApplicationEntity jobAppToBeUpdtd = this.jobApplnRepo.findById(appId).orElseThrow(
+                        () -> new DataNotFoundException(""));
+
+                jobAppToBeUpdtd.setApplicationStatus(applnStatus);
+                JobApplicationEntity updtdJobEntity = this.jobApplnRepo.save(jobAppToBeUpdtd);
+                JobApplication updatedJobApplication = new JobApplication();
+                BeanUtils.copyProperties(updtdJobEntity, updatedJobApplication);
+
+                JobOffer jobOffer = new JobOffer(updtdJobEntity.getJobOffer().getJobId(),
+                        updtdJobEntity.getJobOffer().getJobTitle(), updtdJobEntity.getJobOffer().getJobDesc(),
+                        updtdJobEntity.getJobOffer().getContactPerson(), updtdJobEntity.getJobOffer().getCreatedDate(),
+                        updtdJobEntity.getJobOffer().getModifiedDate(), updtdJobEntity.getJobOffer().getJobOfferStatus(),
+                        updtdJobEntity.getJobOffer().getNoOfApplication());
+
+                updatedJobApplication.setRelatedJobOffer(jobOffer);
+                notificationSvc.processNotification(updatedJobApplication);
+                return updatedJobApplication;
+
+            } *//*catch (NotificationException notifException) {
+                //throw new RecAsstntTechnicalException("Exception occurred while " +
+                //        "sending the notification of job app status.", notifException);
+            }*//* catch (Exception exception) {
+                throw new RecAsstntTechnicalException("Exception occurred while " +
+                        "updating the application status in the data store", exception);
+            }
+
+        }*/
+
+    @Override
+    public JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus,long appId)
+            throws DataNotFoundException, RecAsstntTechnicalException {
+
+        JobApplicationEntity updtdJobEntity;
+
+        try {
 
             JobApplicationEntity jobAppToBeUpdtd = this.jobApplnRepo.findById(appId).orElseThrow(
                     () -> new DataNotFoundException(""));
 
             jobAppToBeUpdtd.setApplicationStatus(applnStatus);
-            JobApplicationEntity updtdJobEntity = this.jobApplnRepo.save(jobAppToBeUpdtd);
-            JobApplication updatedJobApplication = new JobApplication();
-            BeanUtils.copyProperties(updtdJobEntity,updatedJobApplication);
+            updtdJobEntity = this.jobApplnRepo.save(jobAppToBeUpdtd);
 
-            JobOffer jobOffer = new JobOffer(updtdJobEntity.getJobOffer().getJobId(),
-                    updtdJobEntity.getJobOffer().getJobTitle(),updtdJobEntity.getJobOffer().getJobDesc(),
-                    updtdJobEntity.getJobOffer().getContactPerson(),updtdJobEntity.getJobOffer().getCreatedDate(),
-                    updtdJobEntity.getJobOffer().getModifiedDate(),updtdJobEntity.getJobOffer().getJobOfferStatus(),
-                    updtdJobEntity.getJobOffer().getNoOfApplication());
-
-
-            updatedJobApplication.setRelatedJobOffer(jobOffer);
-
-            try {
-                notificationSvc.processNotification(updatedJobApplication);
-            } catch(NotificationException notifException){
-                // Log this exception.
-            }
-
-            return updatedJobApplication;
+        }catch(Exception exception){
+            throw new RecAsstntTechnicalException("Failed to update application status");
         }
 
-        public List<JobApplication> getApplicationsByJobId(long jobId){
+        JobApplication updatedJobApplication = new JobApplication();
+        BeanUtils.copyProperties(updtdJobEntity,updatedJobApplication);
 
-            List<JobApplicationEntity> jobApplicationList  = this.jobApplnRepo.findJobApplicationByOferId(jobId);
+        JobOffer jobOffer = new JobOffer(updtdJobEntity.getJobOffer().getJobId(),
+                updtdJobEntity.getJobOffer().getJobTitle(),updtdJobEntity.getJobOffer().getJobDesc(),
+                updtdJobEntity.getJobOffer().getContactPerson(),updtdJobEntity.getJobOffer().getCreatedDate(),
+                updtdJobEntity.getJobOffer().getModifiedDate(),updtdJobEntity.getJobOffer().getJobOfferStatus(),
+                updtdJobEntity.getJobOffer().getNoOfApplication());
+
+
+        updatedJobApplication.setRelatedJobOffer(jobOffer);
+
+        try {
+            notificationSvc.processNotification(updatedJobApplication);
+        } catch(NotificationException notifException){
+            // Just Log this exception if it comes and proceed with the flow
+            // as notification failure should not obstruct the complete flow.
+        }
+
+        return updatedJobApplication;
+    }
+
+        public List<JobApplication> getApplicationsByJobId(long jobId)
+                throws RecAsstntTechnicalException {
+
+        try {
+
+            List<JobApplicationEntity> jobApplicationList = this.jobApplnRepo.findJobApplicationByOferId(jobId);
 
             List<JobApplication> jobOfferDtoList = jobApplicationList.stream().map(
                     jbAppEntity -> new JobApplication(jbAppEntity.getApplicationId(),
@@ -119,10 +167,16 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
                                     jbAppEntity.getJobOffer().getModifiedDate(),
                                     jbAppEntity.getJobOffer().getJobOfferStatus(),
                                     jbAppEntity.getJobOffer().getNoOfApplication()
-                                   )
                             )
+                    )
             ).collect(Collectors.toList());
 
             return jobOfferDtoList;
+
+        } catch(Exception exception){
+            throw new RecAsstntTechnicalException("Failed while fetching the job application from the" +
+                    " data store with job id : "+jobId);
+        }
+
         }
     }

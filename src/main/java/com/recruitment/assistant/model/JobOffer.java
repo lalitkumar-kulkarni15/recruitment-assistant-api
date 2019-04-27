@@ -153,17 +153,4 @@ public class JobOffer {
     public JobOffer() {
     }
 
-    @Override
-    public String toString() {
-        return "JobOffer{" +
-                "jobId=" + jobId +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", jobDesc='" + jobDesc + '\'' +
-                ", contactPerson='" + contactPerson + '\'' +
-                ", createdDate=" + createdDate +
-                ", modifiedDate=" + modifiedDate +
-                ", jobOfferStatus=" + jobOfferStatus +
-                '}';
-    }
-
 }

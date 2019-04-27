@@ -21,6 +21,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class houses the integration test cases specifically pertaining to
+ * the controller class {@link JobApplicatnController}
+ *
+ * @since 26-04-2019
+ * @version 1.0
+ * @author lalit
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
         classes = {RecruitmentAssistantApiApplication.class})
@@ -41,21 +50,23 @@ public class JobApplicationControllerIntTest {
     @Test
     public void postNewJobAppln_retStsOKWithDataPersisted() {
 
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<>(createTestDataForNewJobOffer(), httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",
-                host, port), HttpMethod.POST, entity, JobOffer.class);
+        // Step 1 : Post a job offer .
+        postJobTestData(createTestDataForNewJobOffer());
 
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediatypeList = new ArrayList<>();
-        mediatypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediatypeList);
-
-        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), httpHeaders);
+        // step 2: Post a new job application
+        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), getHttpHeader());
         ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1", host, port), HttpMethod.POST, entityappl, JobApplication.class);
+
+        // Step 3: Verify the status code
         Assert.assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
+    }
+
+    private void getHeaderToPostJob(JobOffer testDataForNewJobOffer) {
+        httpHeaders = new HttpHeaders();
+        HttpEntity<JobOffer> entity = new HttpEntity<>(testDataForNewJobOffer, httpHeaders);
+        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",
+                host, port), HttpMethod.POST, entity, JobOffer.class);
     }
 
     private JobApplication createTestDataForNewJobApplication() {
@@ -72,21 +83,16 @@ public class JobApplicationControllerIntTest {
                 LocalDate.now(), JobOfferStatus.ACTIVE, 2);
     }
 
+    /**
+     * The intent of this test case is to verify if bad request status code is thrown
+     * if the resume text field is not passed which is mandatory.
+     */
     @Test
     public void postNewJobAppln_retBadReqWhenResumeTextNotPassed() {
 
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<>(createTestDataFrResumeTxtNotSent(), httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",
-                host, port), HttpMethod.POST, entity, JobOffer.class);
+        postJobTestData(createTestDataFrResumeTxtNotSent());
 
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediatypeList = new ArrayList<>();
-        mediatypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediatypeList);
-
-        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataResumeTxtNotPassed(), httpHeaders);
+        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataResumeTxtNotPassed(), getHttpHeader());
         ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1",
                 host, port), HttpMethod.POST, entityappl, JobApplication.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -108,25 +114,18 @@ public class JobApplicationControllerIntTest {
     }
 
 
+    /**
+     * The intent of this test case is to verify if bad request status code is thrown
+     * if the email field is not passed which is mandatory.
+     */
     @Test
     public void postNewJobAppln_retBadReqWhenEmailNotPassed() {
 
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<>(createTestDataFrResumeTxtNotSent(), httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",
-                host, port), HttpMethod.POST, entity, JobOffer.class);
-
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediatypeList = new ArrayList<>();
-        mediatypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediatypeList);
-
-        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataResumeTxtNotPassed(), httpHeaders);
+        postJobTestData(createTestDataFrResumeTxtNotSent());
+        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataResumeTxtNotPassed(), getHttpHeader());
         ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1",
                 host, port), HttpMethod.POST, entityappl, JobApplication.class);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-
     }
 
     private JobOffer createTestDataFrEmailNotSent(){
@@ -143,35 +142,22 @@ public class JobApplicationControllerIntTest {
                 JobApplicationStatus.APPLIED, "Sample Resume");
     }
 
+    /**
+     * The intent of this test case is to verify if the job applications are
+     * able to fetch using the app id.
+     */
     @Test
     public void getJobApplication_retOKStsWithDataSucc(){
 
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<JobOffer>(createTestDataForAddingJobOffer()
-                ,httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",host,port),
-                HttpMethod.POST,entity,JobOffer.class);
+        // Step 1: Post a new job offer.
+        postJobTestData(createTestDataForAddingJobOffer());
 
-
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediatypeList = new ArrayList<>();
-        mediatypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediatypeList);
-
-        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), httpHeaders);
+        // Step 2: Post new job application.
+        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), getHttpHeader());
         ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1", host, port), HttpMethod.POST, entityappl, JobApplication.class);
 
-
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediaTypeList = new ArrayList<>();
-        mediaTypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediaTypeList);
-
-
-
-        HttpEntity<String> entityFetch = new HttpEntity<String>(null,httpHeaders);
+        // Step 3 : Fetch the job application from the data store by app id.
+        HttpEntity<String> entityFetch = new HttpEntity<String>(null,getHttpHeader());
         ResponseEntity<String> responseApp = restTemplate.exchange
                 (createURLWithPort ("/job-application/v1/getJobApplicationByAppId/v1/1",host,port),
                         HttpMethod.GET,entityFetch,String.class);
@@ -187,36 +173,22 @@ public class JobApplicationControllerIntTest {
     }
 
 
-
+    /**
+     * The intent of this test case is to verify if the job applications are
+     * able to fetch using the job id.
+     */
     @Test
     public void getJobApplicationByJobId_retOKStsWithDataSucc(){
 
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<JobOffer>(creTstDataFrGettingJobOffrSrhAppByJobId()
-                ,httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",host,port),
-                HttpMethod.POST,entity,JobOffer.class);
-
-
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediatypeList = new ArrayList<>();
-        mediatypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediatypeList);
+        // Post a job offer.
+        postJobTestData(creTstDataFrGettingJobOffrSrhAppByJobId());
+        httpHeaders = getHttpHeader();
 
         HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), httpHeaders);
         ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1", host, port), HttpMethod.POST, entityappl, JobApplication.class);
 
-
-        httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediaTypeList = new ArrayList<>();
-        mediaTypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediaTypeList);
-
-
-
         HttpEntity<String> entityFetch = new HttpEntity<String>(null,httpHeaders);
+
         ResponseEntity<String> responseApp = restTemplate.exchange
                 (createURLWithPort ("/job-application/v1/getJobApplicationsByJobId/v1/1",host,port),
                         HttpMethod.GET,entityFetch,String.class);
@@ -224,69 +196,64 @@ public class JobApplicationControllerIntTest {
 
     }
 
-    private JobOffer creTstDataFrGettingJobOffrSrhAppByJobId() {
-
-        return new JobOffer(1L, "Sr. Java Engineer",
-                "Job Desc", "Contact Person", LocalDate.now(),
-                LocalDate.now(), JobOfferStatus.ACTIVE, 2);
-    }
-
-
-    @Test
-    public void patchJobApplicationStatus_retOKSts(){
-
-        httpHeaders = new HttpHeaders();
-        HttpEntity<JobOffer> entity = new HttpEntity<JobOffer>(creTstDataFrGettingJobOffrSrhAppByJobId()
-                ,httpHeaders);
-        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",host,port),
-                HttpMethod.POST,entity,JobOffer.class);
-
+    private HttpHeaders getHttpHeader(){
 
         httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         List<MediaType> mediatypeList = new ArrayList<>();
         mediatypeList.add(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(mediatypeList);
-
-        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), httpHeaders);
-        ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1", host, port), HttpMethod.POST, entityappl, JobApplication.class);
-
+        return httpHeaders;
+    }
+// creTstDataFrGettingJobOffrSrhAppByJobId()
+    private void postJobTestData(JobOffer jobOffer){
 
         httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        List<MediaType> mediaTypeList = new ArrayList<>();
-        mediaTypeList.add(MediaType.APPLICATION_JSON);
-        httpHeaders.setAccept(mediaTypeList);
+        HttpEntity<JobOffer> entity = new HttpEntity<JobOffer>(jobOffer
+                ,httpHeaders);
+        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",host,port),
+                HttpMethod.POST,entity,JobOffer.class);
+    }
 
+    private JobOffer creTstDataFrGettingJobOffrSrhAppByJobId() {
+        return new JobOffer(1L, "Sr. Java Engineer",
+                "Job Desc", "Contact Person", LocalDate.now(),
+                LocalDate.now(), JobOfferStatus.ACTIVE, 2);
+    }
 
-        HttpEntity<String> entityPatch = new HttpEntity<String>(null,httpHeaders);
+    /**
+     * The intent of this test case is to verify if the job application status
+     * is able to change successfully. Please refer to the below inline steps comments
+     * for understanding the various steps involved to achieve this test.
+     */
+    @Test
+    public void patchJobApplicationStatus_retOKSts(){
 
+        // Step 1: Post a new job offer in the data store.
+        httpHeaders = new HttpHeaders();
+        HttpEntity<JobOffer> entity = new HttpEntity<JobOffer>(creTstDataFrGettingJobOffrSrhAppByJobId()
+                ,httpHeaders);
+        restTemplate.exchange(createURLWithPort("/job-offer/v1/newJobOffer/v1",host,port),
+                HttpMethod.POST,entity,JobOffer.class);
+
+        // Step 2: Submit a new job application for the job offer posted in step 1.
+        HttpEntity<JobApplication> entityappl = new HttpEntity<JobApplication>(createTestDataForNewJobApplication(), getHttpHeader());
+        ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/job-application/v1/newJobApplication/v1", host, port), HttpMethod.POST, entityappl, JobApplication.class);
+
+        // Step 3: Submit a patch request to update the application status.
+        HttpEntity<String> entityPatch = new HttpEntity<String>(null,getHttpHeader());
         restTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-
         ResponseEntity<JobApplication> responseUpdtd =restTemplate.exchange(createURLWithPort("job-application/v1/updateJobApplnStatus/v1/1/REJECTED",host,port),
                 HttpMethod.PATCH,entityPatch,JobApplication.class);
 
+        // Step 4 : Check if the application status has been updated successfully.
         Assert.assertEquals(responseUpdtd.getBody().getApplicationStatus(),JobApplicationStatus.REJECTED);
 
     }
 
     private JobApplication creTstDataFrUpdatingJobAppStatus() {
-
         return new JobApplication(1L, null,
                 JobApplicationStatus.HIRED, "Sample Resume");
     }
-
-    /*private JobOffer creTstDataFrGettingJobOffrSrhAppByJobId() {
-
-        return new JobOffer(1L, "Sr. Java Engineer",
-                "Job Desc", "Contact Person", LocalDate.now(),
-                LocalDate.now(), JobOfferStatus.ACTIVE, 2);
-    }*/
-
-
-
-
-
-
 
 }

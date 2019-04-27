@@ -23,6 +23,13 @@ import com.recruitment.assistant.enums.JobOfferStatus;
 import com.recruitment.assistant.exception.RecAsstntTechnicalException;
 import com.recruitment.assistant.model.JobOffer;
 
+/**
+ * This class houses the unit test cases for {@link JobOfferSvcImpl}
+ *
+ * @since  26-04-2019
+ * @author lalit
+ * @version 1.0
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class JobOfferServiceImplTest {
 
@@ -32,10 +39,27 @@ public class JobOfferServiceImplTest {
     @InjectMocks
     private JobOfferSvcImpl jobOfferSvc;
 
+    /**
+     * The intent of this test case is to submit a new job offer in the data store
+     * and verify that it was persisted successfully by veryfying the job id created
+     * which is returned back by the persisting method.
+     *
+     * @throws RecAsstntTechnicalException
+     */
     @Test
-    public void test_pos_createNewJobOffer_persistEntitySuccessfully_returnsJobId_Successfully()
+    public void test_createNewJobOffer_persistEntitySuccessfully_returnsJobId_Successfully()
             throws RecAsstntTechnicalException{
 
+        JobOffer jobOfferTestData = getJobOfferTestData();
+
+        JobOfferEntity jobOfferEntity = new JobOfferEntity();
+        BeanUtils.copyProperties(jobOfferTestData,jobOfferEntity);
+        when(this.jobOfferRepository.save(Mockito.any())).thenReturn(jobOfferEntity);
+        JobOffer persistedJobOffer = this.jobOfferSvc.createNewJobOffer(jobOfferTestData);
+        assertEquals(1L, persistedJobOffer.getJobId());
+    }
+
+    private JobOffer getJobOfferTestData() {
         JobOffer jobOfferTestData = new JobOffer();
         jobOfferTestData.setJobId(1L);
         jobOfferTestData.setJobTitle("title");
@@ -44,12 +68,7 @@ public class JobOfferServiceImplTest {
         jobOfferTestData.setModifiedDate(LocalDate.now());
         jobOfferTestData.setJobDesc("Job Desc");
         jobOfferTestData.setJobOfferStatus(JobOfferStatus.ACTIVE);
-
-       JobOfferEntity jobOfferEntity = new JobOfferEntity();
-       BeanUtils.copyProperties(jobOfferTestData,jobOfferEntity);
-       when(this.jobOfferRepository.save(Mockito.any())).thenReturn(jobOfferEntity);
-       JobOffer persistedJobOffer = this.jobOfferSvc.createNewJobOffer(jobOfferTestData);
-       assertEquals(1L, persistedJobOffer.getJobId());
+        return jobOfferTestData;
     }
 
     private JobOffer createJobOfferTestDataPositive() {
@@ -60,8 +79,14 @@ public class JobOfferServiceImplTest {
         return jobOfr;
     }
 
+    /**
+     * The main intent of this test case is to check if the desired exception is
+     * sent back when a run time exception ex :- Null pointer comes up.
+     *
+     * @throws RecAsstntTechnicalException
+     */
     @Test(expected=RecAsstntTechnicalException.class)
-    public void test_neg_createNewJobOffer_throwsRecAsstntException_WhenNullPointer()
+    public void test_createNewJobOffer_throwsRecAsstntException_WhenNullPointer()
             throws RecAsstntTechnicalException {
     	
     	final JobOffer jobOfferTestData = createJobOfferTestData();
@@ -71,9 +96,15 @@ public class JobOfferServiceImplTest {
     	this.jobOfferSvc.createNewJobOffer(jobOfferTestData);
     	
     }
-    
+
+    /**
+     * The main intent of this test case is to check if the desired exception
+     * that is {@link RecAsstntTechnicalException} is sent back when a run time
+     *
+     * @throws RecAsstntTechnicalException
+     */
     @Test(expected=RecAsstntTechnicalException.class)
-    public void test_neg_createNewJobOffer_throwsRecAsstntException_WhenJPASystemException()
+    public void test_createNewJobOffer_throwsRecAsstntException_WhenJPASystemException()
             throws RecAsstntTechnicalException {
     	
     	final JobOffer jobOfferTestData = createJobOfferTestData();
@@ -93,8 +124,12 @@ public class JobOfferServiceImplTest {
         return jobOffer;
     }
 
+    /**
+     * The main intent of this test case is to check if job offers are fetched
+     * successfully by the service class implementation by mocking the dependency.
+     */
     @Test
-    public void test_pos_getAllJobOffers_checksNotNullJobOffersList(){
+    public void test_getAllJobOffers_checksNotNullJobOffersList(){
 
         final List<JobOfferEntity> jobOfferEntyLstTestData = prepareJobOffersEntityListTestData();
         when(this.jobOfferRepository.findAll()).thenReturn(jobOfferEntyLstTestData);
@@ -102,6 +137,11 @@ public class JobOfferServiceImplTest {
         assertNotNull(receivedJobOfferList);
     }
 
+    /**
+     * The main intent of this test case is to check if job id field is
+     * available and is fetched successfull by the service class implementation
+     * by mocking the dependency using mockito framework.
+     */
     @Test
     public void test_pos_getAllJobOffers_checksJobIdFieldsFromResp(){
 
@@ -115,8 +155,21 @@ public class JobOfferServiceImplTest {
         }
     }
 
+    private Optional<JobOffer> getJobOfferEntityForTest() {
+        final List<JobOfferEntity> jobOfferEntyLstTestData = prepareSingleJobOfferEntityListTestData();
+        when(this.jobOfferRepository.findAll()).thenReturn(jobOfferEntyLstTestData);
+        List<JobOffer> receivedJobOfferList = this.jobOfferSvc.getAllJobOffers();
+        assertNotNull(receivedJobOfferList);
+        return receivedJobOfferList.stream().findFirst();
+    }
+
+    /**
+     * The main intent of this test case is to check if job title field is
+     * available and is fetched successfull by the service class implementation
+     * by mocking the dependency using mockito framework.
+     */
     @Test
-    public void test_pos_getAllJobOffers_checksJobTitleFieldsFromResp(){
+    public void test_getAllJobOffers_checksJobTitleFieldsFromResp(){
 
         Optional<JobOffer> jobOfferEntity = getJobOfferEntityForTest();
 
@@ -128,8 +181,13 @@ public class JobOfferServiceImplTest {
         }
     }
 
+    /**
+     * The main intent of this test case is to check if contact person field is
+     * available and is fetched successfull by the service class implementation
+     * by mocking the dependency using mockito framework.
+     */
     @Test
-    public void test_pos_getAllJobOffers_checksCntckPersnFieldsFromResp(){
+    public void test_getAllJobOffers_checksCntckPersnFieldsFromResp(){
 
         Optional<JobOffer> jobOfferEntity = getJobOfferEntityForTest();
 
@@ -139,14 +197,6 @@ public class JobOfferServiceImplTest {
         } else{
             fail("jobOfferEntity is absent");
         }
-    }
-
-    private Optional<JobOffer> getJobOfferEntityForTest() {
-        final List<JobOfferEntity> jobOfferEntyLstTestData = prepareSingleJobOfferEntityListTestData();
-        when(this.jobOfferRepository.findAll()).thenReturn(jobOfferEntyLstTestData);
-        List<JobOffer> receivedJobOfferList = this.jobOfferSvc.getAllJobOffers();
-        assertNotNull(receivedJobOfferList);
-        return receivedJobOfferList.stream().findFirst();
     }
 
     private List<JobOfferEntity> prepareSingleJobOfferEntityListTestData() {
@@ -174,8 +224,12 @@ public class JobOfferServiceImplTest {
         return jobOfferEntityList;
     }
 
+    /**
+     * The main intent of this test case is to check if the job offer received
+     * is not null while fetching it by job title from the data store.
+     */
     @Test
-    public void test_pos_findJobOfferByJobTitle_checksNotNullJobOfferReceived()
+    public void test_findJobOfferByJobTitle_checksNotNullJobOfferReceived()
             throws DataNotFoundException {
 
         Optional<JobOfferEntity> jobOfferEntityTestData = Optional.of(prepJobOfferEntityTestData());
@@ -184,8 +238,12 @@ public class JobOfferServiceImplTest {
         assertNotNull(jobOffer);
     }
 
+    /**
+     * The main intent of this test case is to verify the job offer title received
+     * while fetching it by job title from the data store.
+     */
     @Test
-    public void test_pos_findJobOfferByJobTitle_checksJobOfferTitleReceived()
+    public void test_findJobOfferByJobTitle_checksJobOfferTitleReceived()
             throws DataNotFoundException {
 
         Optional<JobOfferEntity> jobOfferEntityTestData = Optional.of(prepJobOfferEntityTestData());
@@ -202,36 +260,4 @@ public class JobOfferServiceImplTest {
         return jobOfferEntityDtaScDev;
     }
 
-    //@Test
-    public void test_pos_findJobOfferByJobId_checksNotNullJobOfferReceived()
-            throws DataNotFoundException {
-
-        Optional<JobOfferEntity> jobOfferEntityTestData = Optional.
-                of(prepJobOfferEntityTestDataFrFindByJobId());
-        when(this.jobOfferRepository.findById(Mockito.anyLong())).
-                thenReturn(jobOfferEntityTestData);
-        JobOffer jobOfferRec = this.jobOfferSvc.findJobOfferByJobId(1L);
-        assertNotNull(jobOfferRec);
-
-    }
-
-    //@Test
-    public void test_pos_findJobOfferByJobId_checksJobtitleOfJobOfferReceived()
-            throws DataNotFoundException {
-
-        Optional<JobOfferEntity> jobOfferEntityTestData = Optional.
-                of(prepJobOfferEntityTestDataFrFindByJobId());
-        when(this.jobOfferRepository.findById(Mockito.anyLong())).
-                thenReturn(jobOfferEntityTestData);
-        JobOffer jobOfferRec = this.jobOfferSvc.findJobOfferByJobId(1L);
-        assertNotNull(jobOfferRec);
-        assertEquals("Data scientist",jobOfferRec.getJobTitle());
-    }
-
-    private JobOfferEntity prepJobOfferEntityTestDataFrFindByJobId() {
-
-        JobOfferEntity jobOfferEntityDtaScDev = new JobOfferEntity(1L,"Data scientist",
-                "Data scientist Test","Amar Singh",LocalDate.now(),LocalDate.now(), JobOfferStatus.ACTIVE);
-        return jobOfferEntityDtaScDev;
-    }
 }

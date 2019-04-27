@@ -16,7 +16,7 @@ public interface IJobApplicatnSvc {
     JobApplication getAllApps(Long appId) throws DataNotFoundException;
 
     JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus, long appId)
-            throws DataNotFoundException;
+            throws DataNotFoundException, RecAsstntTechnicalException;
 
-    public List<JobApplication> getApplicationsByJobId(long jobId);
+    public List<JobApplication> getApplicationsByJobId(long jobId) throws RecAsstntTechnicalException;
 }
