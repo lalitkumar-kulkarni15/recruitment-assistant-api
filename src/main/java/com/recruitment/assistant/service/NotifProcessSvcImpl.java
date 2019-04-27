@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 public class NotifProcessSvcImpl implements INotifProcessSvc {
 
     @Override
-    public void processNotification(Notification notificationBody) {
+    public Notification processNotification(Notification notificationBody) {
         System.out.println(notificationBody.getNotificationBody());
+        return notificationBody;
     }
 }

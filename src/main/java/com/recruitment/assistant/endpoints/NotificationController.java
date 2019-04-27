@@ -38,10 +38,10 @@ public class NotificationController {
      * @return ResponseEntity : Returms Http.OK - 200 if the notifiation is processed successfully.
      */
     @PostMapping("/deliverNotf/v1")
-    public ResponseEntity deliverNotification(@Valid @RequestBody Notification notification){
+    public ResponseEntity<Notification> deliverNotification(@Valid @RequestBody Notification notification){
 
         // Invoke the service layer to process the notifications further.
-        this.notifProcessSvc.processNotification(notification);
-        return ResponseEntity.ok().build();
+        final Notification notifSent = this.notifProcessSvc.processNotification(notification);
+        return ResponseEntity.ok().body(notifSent);
     }
 }

@@ -39,7 +39,7 @@ public class JobApplicatnSvcImplTest {
      */
     @Test(expected = RecAsstntTechnicalException.class)
     public void getApplicationsByJobIdTest_throwsRecAsstTechEx()
-            throws RecAsstntTechnicalException {
+            throws RecAsstntTechnicalException, DataNotFoundException {
 
         when(this.jobApplicationRepository.findJobApplicationByOferId
                 (Mockito.anyLong()))

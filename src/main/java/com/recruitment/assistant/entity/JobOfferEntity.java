@@ -6,6 +6,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -153,6 +154,20 @@ public class JobOfferEntity {
 
     public JobOfferStatus getJobOfferStatus() {
         return jobOfferStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JobOfferEntity)) return false;
+        JobOfferEntity that = (JobOfferEntity) o;
+        return jobId == that.jobId &&
+                jobTitle.equals(that.jobTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jobId, jobTitle);
     }
 
     public void setJobOfferStatus(JobOfferStatus jobOfferStatus) {

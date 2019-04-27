@@ -53,15 +53,15 @@ public class JobOffer {
     public JobOffer(long jobId, String jobtitle, String jobDesc, String contactPerson, LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus) {
     }
 
-    public int getNoOfApplications() {
-        return noOfApplications;
+    public int getNoOfApplication() {
+        return noOfApplication;
     }
 
-    public void setNoOfApplications(int noOfApplications) {
-        this.noOfApplications = noOfApplications;
+    public void setNoOfApplication(int noOfApplication) {
+        this.noOfApplication = noOfApplication;
     }
 
-    private int noOfApplications;
+    private int noOfApplication;
 
     public Set<JobApplication> getJobApplications() {
         return jobApplications;
@@ -132,7 +132,7 @@ public class JobOffer {
 
 
     public JobOffer(long jobId, String jobTitle, String jobDesc, String contactPerson,
-                    LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus,int noOfApplications) {
+                    LocalDate createdDate, LocalDate modifiedDate, JobOfferStatus jobOfferStatus,int noOfApplication) {
         this.jobId = jobId;
         this.jobTitle = jobTitle;
         this.jobDesc = jobDesc;
@@ -140,7 +140,7 @@ public class JobOffer {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.jobOfferStatus = jobOfferStatus;
-        this.noOfApplications= noOfApplications;
+        this.noOfApplication= noOfApplication;
     }
 
     public JobOffer(long jobId, String jobTitle, String contactPerson, LocalDate createdDate) {

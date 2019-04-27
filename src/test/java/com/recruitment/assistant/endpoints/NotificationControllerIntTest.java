@@ -34,6 +34,10 @@ public class NotificationControllerIntTest {
 
     private HttpHeaders httpHeaders;
 
+    /**
+     * This test case invokes the notification API and verifies
+     * the http response code OK 200.
+     */
     @Test
     public void deliverNotificationTest_returnsOk(){
 
@@ -44,7 +48,7 @@ public class NotificationControllerIntTest {
         httpHeaders.setAccept(mediatypeList);
 
         HttpEntity<Notification> entityNotif = new HttpEntity<Notification>(createTestDataForNotif(), httpHeaders);
-        ResponseEntity<JobApplication> response = restTemplate.exchange(createURLWithPort("/notification/v1/deliverNotf/v1",
+        ResponseEntity response = restTemplate.exchange(createURLWithPort("/notification/v1/deliverNotf/v1",
                 host, port), HttpMethod.POST, entityNotif, JobApplication.class);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -54,6 +58,10 @@ public class NotificationControllerIntTest {
         return new Notification("Sample notification body");
     }
 
+    /**
+     * This test case invokes the notification api by passing null as an input
+     * and verifies the response status code 400 BAD Request.
+     */
     @Test
     public void deliverNotificationTest_returnsBadRequestWhenBodyNull(){
 

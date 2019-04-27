@@ -4,6 +4,6 @@ import com.recruitment.assistant.model.Notification;
 
 public interface INotifProcessSvc {
 
-     void processNotification(final Notification notificationBody);
+     Notification processNotification(final Notification notificationBody);
 
 }

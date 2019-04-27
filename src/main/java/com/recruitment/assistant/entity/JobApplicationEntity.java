@@ -3,6 +3,7 @@ package com.recruitment.assistant.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.recruitment.assistant.enums.JobApplicationStatus;
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "JOB_APPLICATION")
 @Table(name = "JOB_APPLICATION")
@@ -86,6 +87,20 @@ public class JobApplicationEntity {
 
     public void setApplicationStatus(JobApplicationStatus applicationStatus) {
         this.applicationStatus = applicationStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JobApplicationEntity)) return false;
+        JobApplicationEntity that = (JobApplicationEntity) o;
+        return applicationId == that.applicationId &&
+                candidateEmail.equals(that.candidateEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(applicationId, candidateEmail);
     }
 
     public JobApplicationEntity() {

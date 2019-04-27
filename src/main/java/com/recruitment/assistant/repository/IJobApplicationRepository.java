@@ -17,7 +17,7 @@ public interface IJobApplicationRepository extends
     Optional<JobApplicationEntity> findJobApplicationByOfferId(Long appId);
 
     @Query("SELECT A FROM JOB_APPLICATION A WHERE A.jobOffer.jobId=?1")
-    List<JobApplicationEntity> findJobApplicationByOferId(long offerId);
+    Optional<List<JobApplicationEntity>> findJobApplicationByOferId(long offerId);
 
 
 }

@@ -1,6 +1,6 @@
 com\recruitment\assistant\endpoints\JobApplicationControllerIntTest.class
+com\recruitment\assistant\endpoints\JobOfferControllerIntTest.class
 com\recruitment\assistant\service\JobOfferServiceImplTest.class
-com\recruitment\assistant\endpoints\JobOfferControllerTest.class
 com\recruitment\assistant\endpoints\NotificationControllerIntTest.class
 com\recruitment\assistant\utils\ITestUtils.class
 com\recruitment\assistant\RecruitmentAssistantApiApplicationTests.class

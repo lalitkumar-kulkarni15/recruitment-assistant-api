@@ -95,10 +95,12 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
     public JobOffer findJobOfferByJobId(long jobId)
             throws DataNotFoundException {
 
-        Optional<JobOfferEntity> jobOfferEntity = this.jobOfferRepository.findById(jobId);
+        /*Optional<JobOfferEntity> jobOfferEntity = this.jobOfferRepository.findById(jobId);*/
+
+        JobOfferEntity jobOfferEntity = this.jobOfferRepository.findById(jobId).orElseThrow(() -> new DataNotFoundException("Job offer not found for the given job id"));
 
         JobApplication jobApplicationList = new JobApplication();
-        Set<JobApplicationEntity> jobApplicationEntity = jobOfferEntity.get().getJobApplications();
+        Set<JobApplicationEntity> jobApplicationEntity = jobOfferEntity.getJobApplications();
 
         Set<JobApplication> jobApplicationDtoList = jobApplicationEntity.stream().map(
                 jbAplEntity -> new JobApplication(jbAplEntity.getApplicationId(),
@@ -108,7 +110,7 @@ public class JobOfferSvcImpl implements IJobOfferSvc {
                         ).collect(Collectors.toSet());
 
         JobOffer jobOffer = new JobOffer();
-        BeanUtils.copyProperties(jobOfferEntity.get(),jobOffer);
+        BeanUtils.copyProperties(jobOfferEntity,jobOffer);
         jobOffer.setJobApplications(jobApplicationDtoList);
         return jobOffer;
     }

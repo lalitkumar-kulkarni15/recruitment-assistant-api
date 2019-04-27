@@ -52,10 +52,10 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
 
     }
 
-        public JobApplication getAllApps(Long appId) throws DataNotFoundException {
+        public JobApplication getApplcnsByAppId(Long appId) throws DataNotFoundException {
 
             JobApplicationEntity jobApplicationEntity = this.jobApplnRepo.findJobApplicationByOfferId(appId)
-                    .orElseThrow(() -> new DateTimeException(""));
+                    .orElseThrow(() -> new DataNotFoundException("Job application not found for the given app Id"));
             JobApplication jobAppli = new JobApplication();
             BeanUtils.copyProperties(jobApplicationEntity,jobAppli);
 
@@ -73,40 +73,6 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
             return jobAppli;
         }
 
-        /*@Override
-        public JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus,long appId)
-                throws DataNotFoundException, RecAsstntTechnicalException {
-
-            try {
-
-                JobApplicationEntity jobAppToBeUpdtd = this.jobApplnRepo.findById(appId).orElseThrow(
-                        () -> new DataNotFoundException(""));
-
-                jobAppToBeUpdtd.setApplicationStatus(applnStatus);
-                JobApplicationEntity updtdJobEntity = this.jobApplnRepo.save(jobAppToBeUpdtd);
-                JobApplication updatedJobApplication = new JobApplication();
-                BeanUtils.copyProperties(updtdJobEntity, updatedJobApplication);
-
-                JobOffer jobOffer = new JobOffer(updtdJobEntity.getJobOffer().getJobId(),
-                        updtdJobEntity.getJobOffer().getJobTitle(), updtdJobEntity.getJobOffer().getJobDesc(),
-                        updtdJobEntity.getJobOffer().getContactPerson(), updtdJobEntity.getJobOffer().getCreatedDate(),
-                        updtdJobEntity.getJobOffer().getModifiedDate(), updtdJobEntity.getJobOffer().getJobOfferStatus(),
-                        updtdJobEntity.getJobOffer().getNoOfApplication());
-
-                updatedJobApplication.setRelatedJobOffer(jobOffer);
-                notificationSvc.processNotification(updatedJobApplication);
-                return updatedJobApplication;
-
-            } *//*catch (NotificationException notifException) {
-                //throw new RecAsstntTechnicalException("Exception occurred while " +
-                //        "sending the notification of job app status.", notifException);
-            }*//* catch (Exception exception) {
-                throw new RecAsstntTechnicalException("Exception occurred while " +
-                        "updating the application status in the data store", exception);
-            }
-
-        }*/
-
     @Override
     public JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus,long appId)
             throws DataNotFoundException, RecAsstntTechnicalException {
@@ -116,12 +82,15 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
         try {
 
             JobApplicationEntity jobAppToBeUpdtd = this.jobApplnRepo.findById(appId).orElseThrow(
-                    () -> new DataNotFoundException(""));
+                    () -> new DataNotFoundException("Job application not found for the input jobId :"+appId));
 
             jobAppToBeUpdtd.setApplicationStatus(applnStatus);
             updtdJobEntity = this.jobApplnRepo.save(jobAppToBeUpdtd);
 
-        }catch(Exception exception){
+        } catch(DataNotFoundException dataNotFoundEx){
+            throw new DataNotFoundException(dataNotFoundEx.getMessage(),dataNotFoundEx);
+        }
+        catch(Exception exception){
             throw new RecAsstntTechnicalException("Failed to update application status");
         }
 
@@ -148,11 +117,12 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
     }
 
         public List<JobApplication> getApplicationsByJobId(long jobId)
-                throws RecAsstntTechnicalException {
+                throws RecAsstntTechnicalException,DataNotFoundException {
 
         try {
 
-            List<JobApplicationEntity> jobApplicationList = this.jobApplnRepo.findJobApplicationByOferId(jobId);
+            List<JobApplicationEntity> jobApplicationList = this.jobApplnRepo.findJobApplicationByOferId(jobId).orElseThrow(() -> new DataNotFoundException
+                    ("Job application not found for the mentioned job id"));
 
             List<JobApplication> jobOfferDtoList = jobApplicationList.stream().map(
                     jbAppEntity -> new JobApplication(jbAppEntity.getApplicationId(),
@@ -173,7 +143,10 @@ public class JobApplicatnSvcImpl implements IJobApplicatnSvc {
 
             return jobOfferDtoList;
 
-        } catch(Exception exception){
+        } catch(DataNotFoundException dataNtFndEx){
+            throw new DataNotFoundException(dataNtFndEx.getMessage(),dataNtFndEx);
+        }
+        catch(Exception exception){
             throw new RecAsstntTechnicalException("Failed while fetching the job application from the" +
                     " data store with job id : "+jobId);
         }

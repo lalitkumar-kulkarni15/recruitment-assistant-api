@@ -13,10 +13,10 @@ public interface IJobApplicatnSvc {
 
     long submitJobApplicatn(final JobApplication jobApplication) throws DataNotFoundException, RecAsstntTechnicalException;
 
-    JobApplication getAllApps(Long appId) throws DataNotFoundException;
+    JobApplication getApplcnsByAppId(Long appId) throws DataNotFoundException;
 
     JobApplication updateJobApplnStatus(JobApplicationStatus applnStatus, long appId)
             throws DataNotFoundException, RecAsstntTechnicalException;
 
-    public List<JobApplication> getApplicationsByJobId(long jobId) throws RecAsstntTechnicalException;
+    public List<JobApplication> getApplicationsByJobId(long jobId) throws RecAsstntTechnicalException, DataNotFoundException;
 }

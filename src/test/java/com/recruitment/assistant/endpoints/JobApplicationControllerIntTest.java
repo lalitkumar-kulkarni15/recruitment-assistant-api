@@ -47,6 +47,10 @@ public class JobApplicationControllerIntTest {
 
     private HttpHeaders httpHeaders;
 
+    /**
+     * This test case focuses on having a positive test case
+     * wherein persisting the job application returns 200 OK.
+     */
     @Test
     public void postNewJobAppln_retStsOKWithDataPersisted() {
 

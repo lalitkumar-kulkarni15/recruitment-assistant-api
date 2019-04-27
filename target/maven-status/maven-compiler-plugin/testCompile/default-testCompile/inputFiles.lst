@@ -1,6 +1,10 @@
 E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\JobApplicationControllerIntTest.java
+E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\NotificationControllerUnitTest.java
 E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\service\JobOfferServiceImplTest.java
-E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\JobOfferControllerTest.java
 E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\NotificationControllerIntTest.java
+E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\service\JobApplicatnSvcImplTest.java
+E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\JobApplicationControllerUnitTest.java
+E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\JobOfferControllerUnitTest.java
+E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\endpoints\JobOfferControllerIntTest.java
 E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\utils\ITestUtils.java
 E:\IntellijProjectCodebase\src\test\java\com\recruitment\assistant\RecruitmentAssistantApiApplicationTests.java
